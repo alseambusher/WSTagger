@@ -1,13 +1,15 @@
 <?xml version="1.0"?>
 <definitions name="HelloWorld" targetNamespace="urn:HelloWorld" xmlns:tns="urn:HelloWorld"  xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/">
-  <types>
-    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:Hello">
-      <xsd:element name="getName" type="xsd:string" />
-	  <xsd:element name="HelloResponse" type="xsd:string" />
-	</xsd:schema>
-  </types>
+    <types>
+        <!-- define schema here -->
+        <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:Hello">
+            <xsd:element name="getName" type="xsd:string" />
+	        <xsd:element name="HelloResponse" type="xsd:string" />
+	    </xsd:schema>
+    </types>
 
-  <!-- this is input message -->
+    <!-- this is input message -->
+    <!-- type should be an element which is already defined in schema -->
   <message name="doHello">
     <part name="yourName" type="tns:getName" />
   </message>
@@ -17,18 +19,22 @@
     <part name="return" type="tns:HelloResponse" />
   </message>
 
-  <portType name="HelloPort">
-    <operation name="doHello">
-	  <input message="tns:doHello" />
-	  <output message="tns:doHelloResponse" />
-	</operation>
-  </portType>
+    <portType name="HelloPort">
+        <operation name="doHello">
+          <!-- input and output messages already defined -->
+            <input message="tns:doHello" />
+            <output message="tns:doHelloResponse" />
+        </operation>
+    </portType>
 
   <binding name="HelloBinding" type="tns:HelloPort">
+      <!-- style can be 'rpc' or 'document' if rpc is used <soap:body> has to be in proper SOAP format -->
     <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
 	  <operation name="doHello">
 	    <soap:operation soapAction="urn:HelloAction" />
-		<input>
+        <input>
+            <!-- use can be 'encoded' or 'literal'. Literal used if the type directly follows XML schema defn. "encoded" refers to the representation of application data in XML -->
+            <!-- namespace here is same as tragetNamespace -->
 		  <soap:body use="encoded" namespace="urn:Hello" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 		</input>
 		<output>
@@ -44,3 +50,7 @@
   </service>
 
 </definitions>
+<!--
+     tns: this namespace
+     urn: uniform resource name.A persistent, globally unique name assigned to an object. unlike URL doesnt change with location.
+     -->
