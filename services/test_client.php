@@ -1,6 +1,6 @@
 <?
 try{
-    $client = new SoapClient('test_wsdl.xml');
+    $client = new SoapClient('http://localhost/WSTagger/services/test_wsdl.xml');
 
     $params = "Auto tagger";
     $response = $client->doHello($params);

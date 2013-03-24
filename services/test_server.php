@@ -1,6 +1,6 @@
 <?php
 ini_set("soap.wsdl_cache_enabled","0");
-$server = new SoapServer("test_wsdl.xml");
+$server = new SoapServer("http://localhost/WSTagger/services/test_wsdl.xml");
 
 function doHello($yourName){
 
