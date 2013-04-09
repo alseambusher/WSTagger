@@ -19,8 +19,12 @@
     <part name="return" type="tns:HelloResponse" />
   </message>
 
-    <portType name="HelloPort">
-        <operation name="doHello">
+  <portType name="HelloPort">
+      <!-- name is function name -->
+      <operation name="doHello">
+          <documentation>
+              Using this function you can obtain welcome message
+          </documentation>
           <!-- input and output messages already defined -->
             <input message="tns:doHello" />
             <output message="tns:doHelloResponse" />
@@ -34,7 +38,7 @@
 	    <soap:operation soapAction="urn:HelloAction" />
         <input>
             <!-- use can be 'encoded' or 'literal'. Literal used if the type directly follows XML schema defn. "encoded" refers to the representation of application data in XML -->
-            <!-- namespace here is same as tragetNamespace -->
+            <!-- namespace here is same as targetNamespace -->
 		  <soap:body use="encoded" namespace="urn:Hello" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 		</input>
 		<output>
