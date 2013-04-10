@@ -1,4 +1,5 @@
 #!/bin/env python
+"""
 import xml.etree.ElementTree as ET
 tree=ET.parse("../services/test_wsdl.xml")
 root=tree.getroot()
@@ -16,7 +17,7 @@ def operation(root):
                 print "element:",child_child.attrib['type'].split(":")[-1]
         if child.tag.split("}")[-1]=="service":
             print "Service:",child.attrib['name']
-
+"""
 def get_tokens(string):
     string=string.replace("@","%").replace("_","%")
     for char in range(ord('A'),ord('Z')+1):
@@ -54,11 +55,6 @@ def get_tokens(string):
         except:
             pass
 
-
-
     for delete in delete_tokens:
         tokens.remove(delete)
     return tokens
-
-print get_tokens("cAVCsdcasd@asdva%sad1aca2AAAds3A33")
-#operation(root)
