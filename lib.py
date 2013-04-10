@@ -1,4 +1,5 @@
 #!/bin/env python
+from random import random
 """
 import xml.etree.ElementTree as ET
 tree=ET.parse("../services/test_wsdl.xml")
@@ -58,3 +59,7 @@ def get_tokens(string):
     for delete in delete_tokens:
         tokens.remove(delete)
     return tokens
+
+#TODO do this
+def NGD(string1,string2):
+    return random()
