@@ -20,6 +20,8 @@ def operation(root):
             print "Service:",child.attrib['name']
 """
 def get_tokens(string):
+    #remove spaces in begining and ending places
+    string=str(string).strip()
     string=string.replace("@","%").replace("_","%")
     for char in range(ord('A'),ord('Z')+1):
         string=string.replace(chr(char),"%"+chr(char))
@@ -60,6 +62,17 @@ def get_tokens(string):
         tokens.remove(delete)
     return tokens
 
-#TODO do this
-def NGD(string1,string2):
-    return random()
+#similarity b/w words
+def similarity_terms(string1,string2):
+    #Find NGD
+    #TODO Fix NGD
+    NGD=random()
+    return 1-NGD
+
+#similarity
+def similarity(Vs1,Vs2):
+    sum_=0
+    for t1 in Vs1:
+        for t2 in Vs2:
+            sum_+=similarity_terms(t1,t2)
+    return sum_/(len(Vs1)*len(Vs2))
