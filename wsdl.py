@@ -12,30 +12,32 @@ class WSDL():
         self.service=self.service()
     def operation(self):
         data=[]
-        for operation in self.tree.getElementsByTagName("operation"):
+        for operation in self.getElementsByTagName(self.tree,"operation"):
             data.append(operation.getAttributeNode("name").nodeValue)
         return data
     def documentation(self):
         data=[]
-        for document in self.tree.getElementsByTagName("documentation"):
+        for document in self.getElementsByTagName(self.tree,"documentation"):
             data.append(document.firstChild.data)
         return data
     def message(self):
         data=[]
-        for message in self.tree.getElementsByTagName("message"):
+        for message in self.getElementsByTagName(self.tree,"message"):
             name=message.getAttributeNode("name").nodeValue
             attribute=[]
-            for part in message.getElementsByTagName("part"):
+            for part in self.getElementsByTagName(message,"part"):
                 attribute.append(part.getAttributeNode("type").nodeValue.split(":")[-1])
             data.append({'name':name,'attribute':attribute})
         return data
     def elements(self):
         data=[]
-        for element in self.tree.getElementsByTagName("xsd:element"):
+        for element in self.getElementsByTagName(self.tree,"element"):
             data.append(element.getAttributeNode("name").nodeValue)
         return data
     def service(self):
-        return self.tree.getElementsByTagName("service")[0].getAttributeNode("name").nodeValue
+        return self.getElementsByTagName(self.tree,"service")[0].getAttributeNode("name").nodeValue
+    def getElementsByTagName(self,node,tag):
+        return node.getElementsByTagName(tag)+node.getElementsByTagName("xsd:"+tag)+node.getElementsByTagName("wsdl:"+tag)+node.getElementsByTagName("wsdlsoap:"+tag)
     def get_all_strings(self):
         data=[]
         for x in self.operation:
