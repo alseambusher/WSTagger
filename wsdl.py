@@ -1,6 +1,4 @@
 #!/bin/env python
-#TODO put try catch blocks
-#TODO take care of schemas
 import xml.dom.minidom as dom
 class WSDL():
     def __init__(self,wsdl):
@@ -13,12 +11,18 @@ class WSDL():
     def operation(self):
         data=[]
         for operation in self.getElementsByTagName(self.tree,"operation"):
-            data.append(operation.getAttributeNode("name").nodeValue)
+            try:
+                data.append(operation.getAttributeNode("name").nodeValue)
+            except:
+                pass
         return data
     def documentation(self):
         data=[]
         for document in self.getElementsByTagName(self.tree,"documentation"):
-            data.append(document.firstChild.data)
+            try:
+                data.append(document.firstChild.data)
+            except:
+                pass
         return data
     def message(self):
         data=[]
@@ -37,7 +41,8 @@ class WSDL():
     def service(self):
         return self.getElementsByTagName(self.tree,"service")[0].getAttributeNode("name").nodeValue
     def getElementsByTagName(self,node,tag):
-        return node.getElementsByTagName(tag)+node.getElementsByTagName("xsd:"+tag)+node.getElementsByTagName("wsdl:"+tag)+node.getElementsByTagName("wsdlsoap:"+tag)
+        #return node.getElementsByTagName(tag)+node.getElementsByTagName("xsd:"+tag)+node.getElementsByTagName("wsdl:"+tag)+node.getElementsByTagName("wsdlsoap:"+tag)
+        return node.getElementsByTagName(tag)+node.getElementsByTagName("xsd:"+tag)+node.getElementsByTagName("wsdl:"+tag)
     def get_all_strings(self):
         data=[]
         for x in self.operation:
