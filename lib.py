@@ -1,6 +1,10 @@
 #!/bin/env python
+import urllib
+import urllib2
+import json
 import math
-from basic import gsearch
+import sqlite3
+from config import DB
 def get_tokens(string):
     #remove spaces in begining and ending places
     string=str(string).strip().replace("\n"," ")
@@ -44,22 +48,52 @@ def get_tokens(string):
     #remove duplicates and nulls and return
     return filter(None,list(set(tokens)))
 
-#similarity
-def get_similarity(Vs1,Vs2):
-    sum_=0
-    for t1 in Vs1:
-        for t2 in Vs2:
-            sum_+=1-get_NGD(t1,t2)
-    return sum_/(len(Vs1)*len(Vs2))
-
 #NGD
 def get_NGD(string1,string2):
-    print string1,string2
+    if string1==string2:
+        return 0
+    #if already in database return
+    if get_NGD_from_db(string1,string2):
+        return get_NGD_from_db(string1,string2)
     m = 45000000000
     n0 = int(gsearch(string1)['cursor']['estimatedResultCount'])
     n1 = int(gsearch(string2)['cursor']['estimatedResultCount'])
     n2 = int(gsearch(string1+" "+string2)['cursor']['estimatedResultCount'])
-    print n0,n1,n2
     l1 = max(math.log10(n0),math.log10(n1))-math.log10(n2)
     l2 = math.log10(m)-min(math.log10(n0),math.log10(n1))
-    return l1/l2
+    NGD=l1/l2
+    if l1/l2>1:
+        NGD=1
+    if l1/l2<0:
+        NGD=0
+    return NGD
+
+#google search
+def gsearch(searchfor):
+    query = urllib.urlencode({'q': searchfor.lower()})
+    url = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&%s' % query
+    search_request=urllib2.Request(url)
+    search_request.add_header('User-Agent',
+                              'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.19) '
+                              'Gecko/20081202 Firefox (Debian-2.0.0.19-0etch1)')
+    search_request.add_header('Referer','http://www.python.org/')
+    search_response = urllib2.urlopen(search_request)
+    search_results = search_response.read()
+    results = json.loads(search_results)
+    data = results['responseData']
+    return data
+
+def get_NGD_from_db(string1,string2):
+    connect=sqlite3.connect(DB)
+    cursor=connect.cursor()
+    cursor.execute("select distance from ngd where (word1='"+string1+"' and word2='"+string2+"') or (word1='"+string2+"' and word2='"+string1+"')")
+    try:
+        return cursor.fetchone()[0]
+    except:
+        return None
+
+def new_NGD_entry(string1,string2,distance):
+    connect=sqlite3.connect(DB)
+    cursor=connect.cursor()
+    cursor.execute("insert into ngd values('"+string1+"','"+string2+"',"+str(distance)+")")
+    connect.commit()
