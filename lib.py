@@ -66,6 +66,8 @@ def get_NGD(string1,string2):
         NGD=1
     if l1/l2<0:
         NGD=0
+    #Now store NGD
+    new_NGD_entry(string1,string2,NGD)
     return NGD
 
 #google search
