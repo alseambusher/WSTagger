@@ -1,12 +1,11 @@
 #!/bin/env python
 import xml.dom.minidom as dom
+from lib import get_tokens
 class WSDL():
     def __init__(self,wsdl):
         self.tree=dom.parse(wsdl)
         self.operation=self.operation()
         self.documentation=self.documentation()
-        self.message=self.message()
-        self.elements=self.elements()
         self.service=self.service()
     def operation(self):
         data=[]
@@ -28,20 +27,6 @@ class WSDL():
             except:
                 pass
         return data
-    def message(self):
-        data=[]
-        for message in self.getElementsByTagName(self.tree,"message"):
-            name=message.getAttributeNode("name").nodeValue
-            attribute=[]
-            for part in self.getElementsByTagName(message,"part"):
-                attribute.append(part.getAttributeNode("type").nodeValue.split(":")[-1])
-            data.append({'name':name,'attribute':attribute})
-        return data
-    def elements(self):
-        data=[]
-        for element in self.getElementsByTagName(self.tree,"element"):
-            data.append(element.getAttributeNode("name").nodeValue)
-        return data
     def service(self):
         return self.getElementsByTagName(self.tree,"service")[0].getAttributeNode("name").nodeValue
     def getElementsByTagName(self,node,tag):
@@ -58,18 +43,19 @@ class WSDL():
                     part_data['type']=part.getAttributeNode("type").nodeValue.split(":")[-1]
                     data.append(part_data)
         return data
-    def get_all_strings(self):
-        data=[]
-        for x in self.operation:
-            #TODO FIX THIS
-            data.append(x)
-        for x in self.documentation:
-            data.append(x)
-        for x in self.message:
-            data.append(x['name'])
-            for y in x['attribute']:
-                data.append(y)
-        for x in self.elements:
-            data.append(x)
-        data.append(self.service)
-        return data
+    def get_all_tokens(self):
+        service_tokens=get_tokens(self.service)
+        operation_tokens=[]
+        message_tokens=[]
+        type_tokens=[]
+        for operation in [ y for y in [ get_tokens(x['name']) for x in self.operation ] ]:
+            for sub_operation in operation:
+                operation_tokens.append(sub_operation)
+        for message in [ x['input'] for x in self.operation ]+[ x['output'] for x in self.operation ]:
+            for sub_message in message:
+                message_tokens+=get_tokens(sub_message['name'])
+        for _type in [ x['input'] for x in self.operation ]+[ x['output'] for x in self.operation ]:
+            for sub_type in _type:
+                type_tokens+=get_tokens(sub_type['type'])
+        all_tokens=service_tokens+operation_tokens+message_tokens+type_tokens
+        return all_tokens,service_tokens,operation_tokens,message_tokens,type_tokens

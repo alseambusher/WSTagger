@@ -5,3 +5,5 @@ WEIGHT_DOCUMENTATION=0
 
 CWD="/var/www/WSTagger/"
 DB=CWD+"ngd.db"
+
+STOP_WORDS=['a','is','an','it','at','which','that','on','the']
