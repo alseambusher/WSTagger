@@ -5,6 +5,14 @@ import json
 import math
 import sqlite3
 from config import DB
+"""
+functions in this document
+1. get_tokens
+2. get_NGD
+3. gsearch_count
+4. get_NGD_from_db
+5. new_NGD_entry
+"""
 def get_tokens(string):
     #remove spaces in begining and ending places
     string=str(string).strip().replace("\n"," ")
@@ -50,48 +58,67 @@ def get_tokens(string):
 
 #NGD
 def get_NGD(string1,string2):
+    string1=string1.lower()
+    string2=string2.lower()
     if string1==string2:
         return 0
     #if already in database return
     if get_NGD_from_db(string1,string2):
         return get_NGD_from_db(string1,string2)
     m = 45000000000
-    n0 = int(gsearch(string1)['cursor']['estimatedResultCount'])
-    n1 = int(gsearch(string2)['cursor']['estimatedResultCount'])
-    n2 = int(gsearch(string1+" "+string2)['cursor']['estimatedResultCount'])
-    l1 = max(math.log10(n0),math.log10(n1))-math.log10(n2)
-    l2 = math.log10(m)-min(math.log10(n0),math.log10(n1))
-    NGD=l1/l2
+    try:
+        n0 = int(gsearch_count(string1))
+        n1 = int(gsearch_count(string2))
+        n2 = int(gsearch_count(string1+" "+string2))
+        l1 = max(math.log10(n0),math.log10(n1))-math.log10(n2)
+        l2 = math.log10(m)-min(math.log10(n0),math.log10(n1))
+        NGD=l1/l2
+    except ValueError:
+        print "adding new entry %s %s %d"%(string1,string2,1)
+        new_NGD_entry(string1,string2,1)
+        return 1
+    print "adding new entry %s %s %s"%(string1,string2,str(NGD))
+    new_NGD_entry(string1,string2,NGD)
     if l1/l2>1:
         NGD=1
     if l1/l2<0:
         NGD=0
     #Now store NGD
-    new_NGD_entry(string1,string2,NGD)
     return NGD
 
-#google search
-def gsearch(searchfor):
+#google search count
+def gsearch_count(searchfor):
     query = urllib.urlencode({'q': searchfor.lower()})
     url = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&%s' % query
     search_request=urllib2.Request(url)
     search_request.add_header('User-Agent',
                               'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.19) '
                               'Gecko/20081202 Firefox (Debian-2.0.0.19-0etch1)')
-    search_request.add_header('Referer','http://www.python.org/')
+    search_request.add_header('Referer','http://www.facebook.com/')
+    #search_request.add_header('X-Forwarded-For','173.252.110.27')
+
     search_response = urllib2.urlopen(search_request)
     search_results = search_response.read()
     results = json.loads(search_results)
     data = results['responseData']
-    return data
+    try:
+        return data['cursor']['estimatedResultCount']
+    except:
+        try:
+            if data['cursor']['moreResultsUrl']:
+                return 0
+        except:
+            print results
+            exit()
 
 def get_NGD_from_db(string1,string2):
     connect=sqlite3.connect(DB)
     cursor=connect.cursor()
     cursor.execute("select distance from ngd where (word1='"+string1+"' and word2='"+string2+"') or (word1='"+string2+"' and word2='"+string1+"')")
-    try:
-        return cursor.fetchone()[0]
-    except:
+    data=cursor.fetchone()
+    if data:
+        return data[0]
+    else:
         return None
 
 def new_NGD_entry(string1,string2,distance):

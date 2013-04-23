@@ -6,7 +6,10 @@ def get_similarity(Vs1,Vs2):
     for t1 in Vs1:
         for t2 in Vs2:
             sum_+=1-get_NGD(t1,t2)
-    return sum_/(len(Vs1)*len(Vs2))
+    try:
+        return sum_/(len(Vs1)*len(Vs2))
+    except ZeroDivisionError:
+        return 0
 
 #similarity for service name / operation name /element name/ documentation
 def get_similarity_name(name1,name2):
