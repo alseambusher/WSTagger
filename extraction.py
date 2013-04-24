@@ -1,4 +1,6 @@
 import config
+import math
+import operator
 from wsdl import WSDL
 def get_weight_structure(wsdl):
     all_tokens,service_tokens,operation_tokens,message_tokens,type_tokens,documentation_token=wsdl.all_tokens
@@ -55,5 +57,29 @@ def get_weight_frequency(wsdl,clusters):
                     document_frequency[token]+=1
                 except:
                     document_frequency[token]=1
-    return document_frequency
+    weight={}
+    for token in wsdl.all_tokens:
+        weight[token]=(0.5+all_tokens_frequency[token]/all_tokens_frequency_max)*math.log10(0.5+len(cluster)/document_frequency[token])
+    return weight
 
+def total_token_weight(wsdl,clusters):
+    total={}
+    weight_structure=get_weight_structure(wsdl)
+    weight_lexical=get_weight_lexical(wsdl)
+    weight_frequency=get_weight_frequency(wsdl,clusters)
+
+    total=weight_structure
+    for token in weight_lexical.iterkeys():
+        total[token]+=weight_lexical[token]
+    for token in weight_frequency.iterkeys():
+        total[token]+=weight_frequency[token]
+    #NOTE THAT THIS DOESNT RETURN A DICTIONARY!!
+    return sorted(total.iteritems(), key=operator.itemgetter(1))
+
+def tag_enriching(wsdl,clusters,distance_matrix):
+    for sub in clusters:
+        if wsdl.file_name in sub:
+            cluster=sub
+            cluster.pop(wsdl.file_name)
+            break
+    for service in cluster
