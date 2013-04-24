@@ -1,7 +1,18 @@
 import config
+from HANDMADE_TAGS import HANDMADE_TAGS
 import math
 import operator
+import clustering
+import lib
 from wsdl import WSDL
+"""
+Functions in this file
+    get_weight_structure
+    get_weight_lexical
+    get_weight_frequency
+    total_token_weight
+    tag_enriching
+"""
 def get_weight_structure(wsdl):
     all_tokens,service_tokens,operation_tokens,message_tokens,type_tokens,documentation_token=wsdl.all_tokens
     weight_service=1.0
@@ -82,4 +93,8 @@ def tag_enriching(wsdl,clusters,distance_matrix):
             cluster=sub
             cluster.pop(wsdl.file_name)
             break
-    for service in cluster
+    score={}
+    for service in cluster:
+        for tag in HANDMADE_TAGS[wsdl.file_name]:
+            score[tag]=distance_matrix[service][wsdl.file_name]+clustering.get_similarity(wsdl.service_tokens,lib.get_tokens(tag))
+    return sorted(score.iteritems(), key=operator.itemgetter(1))

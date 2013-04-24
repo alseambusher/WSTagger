@@ -1,4 +1,10 @@
 import nltk
+"""
+functions in this file
+    get_sentence
+    get_noun_phrase_tree
+    lexical_analyzer
+"""
 def get_sentence(document):
     sentences=nltk.sent_tokenize(document)
     sentences=[nltk.word_tokenize(sent) for sent in sentences]

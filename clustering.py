@@ -12,7 +12,7 @@ functions in this document
     get_similarity_operation
     similarity_wsdl
     get_distance_matrix
-    all_wsdl_similarity
+    get_all_clusters
 """
 #get similarity
 def get_similarity(Vs1,Vs2):
@@ -83,7 +83,10 @@ def get_distance_matrix():
     for service in wsdl_files:
         distance_matrix[service]={}
     for service1 in wsdl_files:
+        #TODO this might give problem due to folders
+        service1=config.SERVICES_FOLDER+service1
         for service2 in wsdl_files:
+            service2=config.SERVICES_FOLDER+service2
             if service1==service2:
                 distance_matrix[service1][service2]=-1
             else:

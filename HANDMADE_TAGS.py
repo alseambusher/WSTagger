@@ -1,1 +1,21 @@
-HANDMADE_TAGS=
+from config import SERVICES_FOLDER
+HANDMADE_TAGS={SERVICES_FOLDER+"1personbicyclecar_price_TheBestservice.wsdl":[],\
+               SERVICES_FOLDER+"academic-degreegovernment_funding_service.wsdl":[],\
+               SERVICES_FOLDER+"CareorganizationDiagnosticprocesstimemeasure.wsdl":[],\
+               SERVICES_FOLDER+"CareorganizationDiagnosticprocesstimeinterval.wsdl":[],\
+               SERVICES_FOLDER+"amount-of-money3wheeledcar_price_service.wsdl":[],\
+               SERVICES_FOLDER+"CareorganizationDiagnosticprocess.wsdl":[],\
+               SERVICES_FOLDER+"Amount-of-moneycarPrice.wsdl":[],\
+               SERVICES_FOLDER+"amount-of-money3wheeledcar_recommendedprice_service.wsdl":[],\
+               SERVICES_FOLDER+"Academic-degreegovernmentorganizationLending.wsdl":[],\
+               SERVICES_FOLDER+"Academic-degreegovernmentLending.wsdl":[],\
+               SERVICES_FOLDER+"CareorganizationDiagnosticprocesstimeduration.wsdl":[],\
+               SERVICES_FOLDER+"amount-of-money4wheeledcar_price_service.wsdl":[],\
+               SERVICES_FOLDER+"CareorganizationDiagnosticprocesslengthmeasure.wsdl":[],\
+               SERVICES_FOLDER+"academic-degreegovernment_scholarship_service.wsdl":[],\
+               SERVICES_FOLDER+"academic-degreegovernmentorganization_funding_service.wsdl":[],\
+               SERVICES_FOLDER+"1personbicycle4wheeledcar_price_service.wsdl":[],\
+               SERVICES_FOLDER+"_3WheeledAudiCarprice_service.wsdl":[],\
+               SERVICES_FOLDER+"amount-of-money4wheeledcar_recommendedprice_service.wsdl":[],\
+               SERVICES_FOLDER+"Academic-degreeFunding.wsdl":[],\
+               SERVICES_FOLDER+"1personbicyclecar_price_Kohlservice.wsdl":[]}
