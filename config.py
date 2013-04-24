@@ -7,3 +7,7 @@ CWD="/var/www/WSTagger/"
 DB=CWD+"ngd.db"
 
 STOP_WORDS=['a','is','an','it','at','which','that','on','the','and']
+
+SERVICES_FOLDER="services/"
+
+CLUSTERING_WEIGHT_THRESHOLD=0.5
