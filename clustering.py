@@ -90,7 +90,8 @@ def get_distance_matrix():
                 distance_matrix[service1][service2]=similarity_wsdl(WSDL(service2),WSDL(service2))
     return distance_matrix
 
-def all_wsdl_similarity(distance_matrix=[]):
+#this gives cluster matrix along with the distances
+def get_all_clusters(distance_matrix=[]):
     #initialize clusters
     clusters_matrix=distance_matrix
     """
@@ -133,5 +134,5 @@ def all_wsdl_similarity(distance_matrix=[]):
                     pass
         else:
             break
-    #OUTPUT format [ '1' ,'3,2', '4,5,6' ]
-    return [x for x in clusters_matrix.iterkeys()]
+    #OUTPUT format [ ['1'] ,['3','2'], ['4','5','6'] ]
+    return [x.split(",") for x in clusters_matrix.iterkeys()]

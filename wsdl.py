@@ -1,13 +1,17 @@
 #!/bin/env python
 import xml.dom.minidom as dom
-from extraction import lexical_analyzer
+import config
+from lexical_analysis import lexical_analyzer
 from lib import get_tokens
 class WSDL():
     def __init__(self,wsdl):
         self.tree=dom.parse(wsdl)
+        self.file_name=wsdl
         self.operation=self.operation()
         self.documentation=self.documentation()
         self.service=self.service()
+        self.all_tokens,self.service_tokens,self.operation_tokens,self.message_tokens,self.type_tokens,self.documentation_token=self.get_all_tokens()
+        config.COMPUTED_WSDL[wsdl]=self
     def operation(self):
         data=[]
         for portType in self.getElementsByTagName(self.tree,"portType"):
