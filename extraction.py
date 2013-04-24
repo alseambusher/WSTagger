@@ -1,3 +1,4 @@
+import config
 def get_weight_structure(wsdl):
     all_tokens,service_tokens,operation_tokens,message_tokens,type_tokens=wsdl.get_all_tokens()
     weight_service=1.0
@@ -16,4 +17,7 @@ def get_weight_structure(wsdl):
     return weight
 
 def get_weight_lexical(wsdl):
-    all_tokens=wsdl.get_all_tokens()[0]
+    all_tokens=list(set(wsdl.get_all_tokens()[0]))
+    for token in all_tokens:
+        if token in config.STOP_WORDS:
+            all_tokens.remove(token)
