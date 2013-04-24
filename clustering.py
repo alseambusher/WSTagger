@@ -81,6 +81,7 @@ def get_distance_matrix():
     wsdl_files=os.listdir(config.SERVICES_FOLDER)
     distance_matrix={}
     for service in wsdl_files:
+        service=config.SERVICES_FOLDER+service
         distance_matrix[service]={}
     for service1 in wsdl_files:
         #TODO this might give problem due to folders

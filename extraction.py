@@ -14,7 +14,7 @@ Functions in this file
     tag_enriching
 """
 def get_weight_structure(wsdl):
-    all_tokens,service_tokens,operation_tokens,message_tokens,type_tokens,documentation_token=wsdl.all_tokens
+    all_tokens,service_tokens,operation_tokens,message_tokens,type_tokens,documentation_token=wsdl.all_tokens,wsdl.service_tokens,wsdl.operation_tokens,wsdl.message_tokens,wsdl.type_tokens,wsdl.documentation_token
     weight_service=1.0
     weight_documentation=1.0/16
     weight_operation=weight_service/(len(wsdl.operation)-1+2)
@@ -91,7 +91,7 @@ def tag_enriching(wsdl,clusters,distance_matrix):
     for sub in clusters:
         if wsdl.file_name in sub:
             cluster=sub
-            cluster.pop(wsdl.file_name)
+            cluster.remove(wsdl.file_name)
             break
     score={}
     for service in cluster:

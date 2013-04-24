@@ -17,17 +17,17 @@
 			</xsd:simpleType>
 		</xsd:schema>
 	</wsdl:types>
-	<wsdl:message name="get_PRICEResponse">
+	<wsdl:message name="get_PRICE_Response">
 		<wsdl:part name="_PRICE" type="tns:PriceType">
     </wsdl:part>
 	</wsdl:message>
-	<wsdl:message name="get_PRICERequest">
+	<wsdl:message name="get_PRICE_Request">
   </wsdl:message>
 	<wsdl:portType name="PriceSoap">
 		<wsdl:operation name="get_PRICE">
-			<wsdl:input message="tns:get_PRICERequest">
+			<wsdl:input message="tns:get_PRICE_Request">
     </wsdl:input>
-			<wsdl:output message="tns:get_PRICEResponse">
+			<wsdl:output message="tns:get_PRICE_Response">
     </wsdl:output>
 		</wsdl:operation>
 	</wsdl:portType>
