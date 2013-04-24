@@ -1,5 +1,6 @@
 #!/bin/env python
 import xml.dom.minidom as dom
+from extraction import lexical_analyzer
 from lib import get_tokens
 class WSDL():
     def __init__(self,wsdl):
@@ -57,5 +58,7 @@ class WSDL():
         for _type in [ x['input'] for x in self.operation ]+[ x['output'] for x in self.operation ]:
             for sub_type in _type:
                 type_tokens+=get_tokens(sub_type['type'])
-        all_tokens=service_tokens+operation_tokens+message_tokens+type_tokens
-        return all_tokens,service_tokens,operation_tokens,message_tokens,type_tokens
+        documentation_token=lexical_analyzer(self.documentation)
+        all_tokens=service_tokens+operation_tokens+message_tokens+type_tokens+documentation_token['NP']+documentation_token['NN']+documentation_token['VB']
+        #NOTE THAT DOCUMENTATION IS A DICTIONARY NOT AN ARRAY
+        return all_tokens,service_tokens,operation_tokens,message_tokens,type_tokens,documentation_token

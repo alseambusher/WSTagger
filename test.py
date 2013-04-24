@@ -1,12 +1,10 @@
-#import extraction
-import clustering
+import extraction
 #from extraction import get_weight_structure
-import sys
-from wsdl import WSDL
-service1=WSDL(sys.argv[1])
+#import sys
+#from wsdl import WSDL
+#service1=WSDL(sys.argv[1])
 #print get_weight_structure(service1)
-service2=WSDL(sys.argv[2])
-print clustering.similarity_wsdl(service1,service2)
+#service2=WSDL(sys.argv[2])
 #print service1.operation
 #print lib.get_tokens("cAVCsdcasd@asdva%sad1aca2AAAds3A33")
 #print "".join(service.get_all_strings())
@@ -16,4 +14,4 @@ print clustering.similarity_wsdl(service1,service2)
 #print lib.get_similarity(token1,token2)
 #clustering.get_similarity_operation(service1.operation,service2.operation)
 #print clustering.all_wsdl_similarity()
-#print extraction.lexical_analyzer("The great service which can book book")
+print extraction.lexical_analyzer("The great service which can book book")
