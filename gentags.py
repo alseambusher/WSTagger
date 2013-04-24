@@ -13,4 +13,5 @@ import clustering
 #token2=lib.get_tokens(service2.service)
 #print lib.get_similarity(token1,token2)
 #clustering.get_similarity_operation(service1.operation,service2.operation)
-print clustering.all_wsdl_similarity()
+#print clustering.all_wsdl_similarity()
+print clustering.lexical_analyzer("Get Weather forecast")

@@ -1,7 +1,20 @@
 import os
 import config
+import nltk
 from lib import get_NGD,get_tokens
 from wsdl import WSDL
+"""
+functions in this document
+    get_similarity
+    get_similarity_name
+    get_similarity_type
+    get_similarity_element
+    get_similarity_input_output
+    get_similarity_operation
+    similarity_wsdl
+    get_distance_matrix
+    all_wsdl_similarity
+"""
 #get similarity
 def get_similarity(Vs1,Vs2):
     sum_=0
@@ -124,3 +137,37 @@ def all_wsdl_similarity(distance_matrix=[]):
     #OUTPUT format [ '1' ,'3,2', '4,5,6' ]
     return [x for x in clusters_matrix.iterkeys()]
 
+def get_sentence(document):
+    sentences=nltk.sent_tokenize(document)
+    sentences=[nltk.word_tokenize(sent) for sent in sentences]
+    sentences=[nltk.pos_tag(sent) for sent in sentences][0]
+    grammar="NP: {<DT>?<JJ>*<NN>}"
+    cp = nltk.RegexpParser(grammar)
+    #returns a tree and an array
+    return cp.parse(sentences),sentences
+
+def get_noun_phrase_tree(myTree, phrase="NP"):
+    myPhrases = []
+    if (myTree.node == phrase):
+        myPhrases.append( myTree.copy(True) )
+    for child in myTree:
+        if (type(child) is nltk.tree.Tree):
+            list_of_phrases = get_noun_phrase_tree(child, phrase)
+            if (len(list_of_phrases) > 0):
+                myPhrases.extend(list_of_phrases)
+    return myPhrases
+
+def lexical_analyzer(string):
+    data={'NP':[],'NN':[],'VB':[]}
+    sentence_tree,sentence=get_sentence(string)
+    myPhrases=get_noun_phrase_tree(sentence_tree)
+    NP=[]
+    for phrase in myPhrases:
+        NP.append("")
+        for word in phrase:
+            NP[-1]+=" "+word[0]
+        NP[-1]=NP[-1][1:]
+    data['NP']=NP
+    data['NN']=[ x for (x,y) in sentence if y[0]=="N" ]
+    data['VB']=[ x for (x,y) in sentence if y[0]=="V" ]
+    return data
