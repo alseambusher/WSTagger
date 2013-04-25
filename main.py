@@ -7,6 +7,7 @@ from wsdl import WSDL
 distance_matrix=clustering.get_distance_matrix()
 print distance_matrix
 clusters=clustering.get_all_clusters(distance_matrix)
+print "\nCLUSTERS\n"
 print clusters
 
 #parse WSDL
@@ -19,11 +20,13 @@ token_weight={}
 for wsdl in wsdl_object_array:
     token_weight[wsdl.file_name]=extraction.total_token_weight(wsdl,clusters)
 
-print token_weight
+#print "\nTOKEN WEIGHT\n"
+#print token_weight
 #enrich tags for all wsdl
 enriched_tags={}
 for wsdl in wsdl_object_array:
     enriched_tags[wsdl.file_name]=extraction.tag_enriching(wsdl,clusters,distance_matrix)
 
-print enriched_tags
+#print "\nENRICHED TAGS\n"
+#print enriched_tags
 

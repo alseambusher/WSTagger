@@ -70,7 +70,7 @@ def get_similarity_operation(operationSet1,operationSet2):
         _sum+=max([ 0.4*get_similarity_name(x['name'],operation['name'])+0.3*get_similarity_input_output(x,operation)+0.3*get_similarity_input_output(x,operation,"output") for x in operationSet2])
     for operation in operationSet2:
         _sum+=max([ 0.4*get_similarity_name(x['name'],operation['name'])+0.3*get_similarity_input_output(x,operation)+0.3*get_similarity_input_output(x,operation,"output") for x in operationSet1])
-    return _sum
+    return _sum/(len(operationSet1)+len(operationSet2))
 
 def similarity_wsdl(wsdl1,wsdl2):
     return config.WEIGHT_SERVICE*get_similarity_name(wsdl1.service,wsdl2.service
@@ -84,14 +84,13 @@ def get_distance_matrix():
         service=config.SERVICES_FOLDER+service
         distance_matrix[service]={}
     for service1 in wsdl_files:
-        #TODO this might give problem due to folders
         service1=config.SERVICES_FOLDER+service1
         for service2 in wsdl_files:
             service2=config.SERVICES_FOLDER+service2
             if service1==service2:
                 distance_matrix[service1][service2]=-1
             else:
-                distance_matrix[service1][service2]=similarity_wsdl(WSDL(service2),WSDL(service2))
+                distance_matrix[service1][service2]=similarity_wsdl(WSDL(service1),WSDL(service2))
     return distance_matrix
 
 #this gives cluster matrix along with the distances

@@ -63,8 +63,14 @@ def get_NGD(string1,string2):
     if string1==string2:
         return 0
     #if already in database return
-    if get_NGD_from_db(string1,string2):
-        return get_NGD_from_db(string1,string2)
+    NGD_pre_calculated=get_NGD_from_db(string1,string2)
+    if NGD_pre_calculated:
+        if NGD_pre_calculated<0:
+            return 0
+        if NGD_pre_calculated>1:
+            return 1
+        else:
+            return NGD_pre_calculated
     m = 45000000000
     try:
         n0 = int(gsearch_count(string1))
